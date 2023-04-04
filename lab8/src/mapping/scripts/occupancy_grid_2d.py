@@ -1,12 +1,10 @@
-################################################################################
-#
-# OccupancyGrid2d class listens for LaserScans and builds an occupancy grid.
-#
-################################################################################
+
+#!/usr/bin/env python
 
 import rospy
 import tf2_ros
 import tf
+import sys
 
 from sensor_msgs.msg import LaserScan
 from visualization_msgs.msg import Marker
@@ -51,14 +49,14 @@ class OccupancyGrid2d(object):
 
         # Dimensions and bounds.
         # TODO! You'll need to set values for class variables called:
-        # -- self._x_num
-        # -- self._x_min
-        # -- self._x_max
-        # -- self._x_res # The resolution in x. Note: This isn't a ROS parameter. What will you do instead?
-        # -- self._y_num
-        # -- self._y_min
-        # -- self._y_max
-        # -- self._y_res # The resolution in y. Note: This isn't a ROS parameter. What will you do instead?
+        self._x_num = rospy.get_param("~x/num")
+        self._x_min = rospy.get_param("~x/min")
+        self._x_max = rospy.get_param("~x/max")
+        self._x_res = int((self._x_max - self._x_min) / self._x_num) # The resolution in x. Note: This isn't a ROS parameter. What will you do instead?
+        self._y_num = rospy.get_param("~y/num")
+        self._y_min = rospy.get_param("~y/min")
+        self._y_max = rospy.get_param("~x/max")
+        self._y_res = int((self._y_max - self._y_min) / self._y_num) # The resolution in y. Note: This isn't a ROS parameter. What will you do instead?
 
         # Update parameters.
         if not rospy.has_param("~update/occupied"):
@@ -83,13 +81,13 @@ class OccupancyGrid2d(object):
 
         # Topics.
         # TODO! You'll need to set values for class variables called:
-        # -- self._sensor_topic
-        # -- self._vis_topic
+        self._sensor_topic = rospy.get_param("~topics/sensor")
+        self._vis_topic = rospy.get_param("~topics/vis")
 
         # Frames.
         # TODO! You'll need to set values for class variables called:
-        # -- self._sensor_frame
-        # -- self._fixed_frame
+        self._sensor_frame = rospy.get_param("~frames/sensor")
+        self._fixed_frame = rospy.get_param("~frames/fixed")
 
         return True
 
@@ -224,3 +222,15 @@ class OccupancyGrid2d(object):
                 m.colors.append(self.Colormap(ii, jj))
 
         self._vis_pub.publish(m)
+
+
+if __name__ == "__main__":
+    rospy.init_node("mapping_node")
+    og = OccupancyGrid2d()
+    
+    if not og.Initialize():
+        rospy.logerr("Failed to initialize the mapping node.")
+        sys.exit(1)
+
+    rospy.spin()
+

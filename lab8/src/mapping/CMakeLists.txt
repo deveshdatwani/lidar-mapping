@@ -23,7 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -73,7 +73,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   sesor_msgs#   std_msgs#   visualization_msgs
+#   geometry_msgs#   sensor_msgs#   std_msgs#   visualization_msgs
 # )
 
 ################################################
@@ -108,7 +108,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES mapping
-#  CATKIN_DEPENDS geometry_msgs rospy sesor_msgs std_msgs tf2_ros visualization_msgs
+#  CATKIN_DEPENDS geometry_msgs rospy sensor_msgs std_msgs tf2_ros visualization_msgs
 #  DEPENDS system_lib
 )
 
@@ -162,11 +162,10 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-catkin_install_python(PROGRAMS
-   occupancy_grid_2d.py
-   mapping_node.py
-   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+# catkin_install_python(PROGRAMS
+#   scripts/my_python_script
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
@@ -208,3 +207,9 @@ catkin_install_python(PROGRAMS
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+catkin_install_python(PROGRAMS scripts/mapping_node.py 
+    scripts/occupancy_grid_2d.py
+    scripts/hello.py
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
