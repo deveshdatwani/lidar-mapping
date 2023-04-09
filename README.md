@@ -55,11 +55,13 @@ These parameters can be adjusted to build maps with requried resolution and spee
 Follow the steps below in order to map the environment in gazebo 
 
 1. Source all necassary setup files in the devel folder
-2. Launch a turtlebot in the Gazebo environment 
+2. Launch a turtlebot in the Gazebo environment <br>
 ``` roslaunch turtlebot3_gazebo turtlebot3_world.launch ```
-3. Run the demo 
+3. Run the demo <br>
 ``` roslaunch mapping demo.launch ```
-4. 
+4. Launch rviz and add visualization through the topic /map/vis <br>
+``` roslaunch turtlebot3_gazebo_rviz turtlebot3_gazebo turtlebot3_gazebo_rviz.launch ```
+
 
 
   
