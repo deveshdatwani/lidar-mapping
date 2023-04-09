@@ -91,7 +91,7 @@ x_num, y_num  = 450
 
 ```
 
-<p align="center"><img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/map1.png" height=600, width=600></p>
+<p align="center"><img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/map1.png" width=600></p>
 
   
   
