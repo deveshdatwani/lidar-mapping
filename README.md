@@ -81,7 +81,14 @@ Follow the steps below in order to map the environment in gazebo
 4. Launch rviz and add visualization through the topic /map/vis <br>
 ``` roslaunch turtlebot3_gazebo_rviz turtlebot3_gazebo turtlebot3_gazebo_rviz.launch ```
 
+### Example Mapping
 
+Turtlebot World 1
+
+``` x_res, y_res = 0.01
+x_num, y_num  = 450 ```
+
+<p align="center"><img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/bresenham.png" height=600, width=600></p>
 
   
   
