@@ -50,11 +50,19 @@ These parameters can be adjusted to build maps with requried resolution and spee
 
 ### Updating 
 
-Updating with log-odds
+Updating With Log-odds
 
 In the code for this lab, each voxel in the map actually stores the log-odds of the cell instead of the probability. Conversion from probability to log-odds transforms the range of possible values from [0, 1], which is bounded and centered around 0.5, to the range (−∞, ∞), which is unbounded and centered around 0, making things easier for analysis.
 
 <p align="center"><img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/log-odds.png" height=300, width=300></p>
+
+<i> When a scan ray terminates at a particular cell, that cell’s log-odds ratio is incremented by some small amount — i.e., ` ←− ` + ∆ occ — and then upper bounded by a maximum threshold to ensure numerical stability. Likewise, when the ray passes through a cell (and does not terminate there), that cell’s log-odds ratio is decremented by some other amount — i.e., ` ←− ` + ∆ f ree , where by convention ∆ f ree is negative — and similarly lower bounded by a minimum threshold. In particular, these increments are computed as the log-odds ratios corresponding to the probability that a cell is occupied given that a ray terminates there and the probability that a cell is occupied given that a ray passes through it, respectivel </i> - Lab 8 documentation, UC Berkley
+
+### Update Algorithm
+
+Once the end point is located using geometric principles, the algorithm "walks" back towards the robot and updates the occupancy of each voxel in its path. This is carried out through the Bresenham's algorithm.
+
+<p align="center"><img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/bresenham.png" height=300, width=300></p>
 
 
 ### Running The Code 
