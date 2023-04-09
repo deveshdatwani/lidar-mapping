@@ -8,7 +8,7 @@ In the Fall of 2022, I worked with the Worcester Fire Department, Worcester, MA 
 
 We achieved great results in our attempt to build a novel approach for detecting obstacles in the way to fire exits and scoring a safety metric for safety preparedness of buildings. One thing that bothered me was the abstraction in our solution that arrised from deploying standard ROS packages. This repository contains my attempt to build my own package for mapping. 
 
-The occupany_grid_2d.py node under the mapping package implements one of the most important data structures in mobile robotics: <i> occupany grids <i>. It is essentially a 2d matrix (in this case due to 2 dimensional lidar), each cell containing a probability value of the cell being either occupied or free. This matrix keeps a track of each cell in the environment. 
+The occupany_grid_2d.py node under the mapping package implements one of the most important data structures in mobile robotics: <i> occupany grids </i>. It is essentially a 2d matrix (in this case due to 2 dimensional lidar), each cell containing a probability value of the cell being either occupied or free. This matrix keeps a track of each cell in the environment. 
   
 ### Set up 
   
