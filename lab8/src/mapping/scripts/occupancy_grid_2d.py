@@ -185,16 +185,19 @@ class OccupancyGrid2d(object):
             end_point_x_fixed_frame = (end_point_x + robot_x) 
             end_point_y_fixed_frame = (end_point_y + robot_y) 
             
-            grid_point_x, grid_point_y = self.PointToVoxel(end_point_x_fixed_frame, end_point_y_fixed_frame)
-
             # Walk backward from here
-
             # Update each voxel in path
-
-            self._map[grid_point_x, grid_point_y] = 1
+            self.bersen(end_point_x_fixed_frame, end_point_y_fixed_frame, robot_x, robot_y)
 
         # Visualize.
         self.Visualize()
+
+    # Traverse backwards from end point to the robot with ___ algorithm
+    def bersen(self, x1, y1, x2, y2):
+        occupied = set()
+        unoccupied = set()
+        
+        return True
 
     # Convert (x, y) coordinates in fixed frame to grid coordinates.
     def PointToVoxel(self, x, y):
