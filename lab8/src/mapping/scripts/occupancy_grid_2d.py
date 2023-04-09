@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import rospy
@@ -48,10 +47,10 @@ class OccupancyGrid2d(object):
             return False
         
         if not rospy.has_param("~x/res"):
-            rospy.set_param('~x/res', 0.05)
+            rospy.set_param('~x/res', 0.01)
         
-        if not rospy.has_param("~x/res"):
-            rospy.set_param('~y/res', 0.05)
+        if not rospy.has_param("~y/res"):
+            rospy.set_param('~y/res', 0.01)
 
         self._random_downsample = rospy.get_param("~random_downsample")
 
@@ -60,11 +59,11 @@ class OccupancyGrid2d(object):
         self._x_num = rospy.get_param("~x/num")
         self._x_min = rospy.get_param("~x/min")
         self._x_max = rospy.get_param("~x/max")
-        self._x_res = rospy.get_param('~x/res')
+        self._x_res = rospy.get_param("~x/res")
         self._y_num = rospy.get_param("~y/num")
         self._y_min = rospy.get_param("~y/min")
         self._y_max = rospy.get_param("~x/max")
-        self._y_res = rospy.get_param('~y/res')
+        self._y_res = rospy.get_param("~y/res")
 
         # Update parameters.
         if not rospy.has_param("~update/occupied"):
@@ -187,15 +186,42 @@ class OccupancyGrid2d(object):
             
             # Walk backward from here
             # Update each voxel in path
-            self.bersen(end_point_x_fixed_frame, end_point_y_fixed_frame, robot_x, robot_y)
-
+            grid_x, grid_y = self.PointToVoxel(end_point_x_fixed_frame, end_point_y_fixed_frame)
+            # self.bresenham(end_point_x_fixed_frame, end_point_y_fixed_frame, robot_x, robot_y, grid_x, grid_y)
+            # self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._occupied_update), self._occupied_threshold) 
+            self._map[grid_x, grid_y] = 1
+        
         # Visualize.
         self.Visualize()
 
     # Traverse backwards from end point to the robot with ___ algorithm
-    def bersen(self, x1, y1, x2, y2):
-        occupied = set()
-        unoccupied = set()
+    def bresenham(self, x1, y1, x0, y0, grid_x, grid_y):
+        travelled = set()
+        travelled.add((grid_x, grid_y))
+        dx = x1 - x0
+        dy = y1 - y0
+        x = x0
+        y = y0
+        p = 2*dy-dx
+
+        while (x < x1):
+            if p >= 0:
+                (grid_x, grid_y) = self.PointToVoxel(x, y)
+
+                if (grid_x, grid_y) not in travelled:
+                    self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._free_update), self._free_threshold) 
+                
+                y += 1
+                p = p + 2 * dy - 2 * dx
+            
+            else:
+                (grid_x, grid_y) = self.PointToVoxel(x, y)
+
+                if (grid_x, grid_y) not in travelled:
+                    self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._free_update), self._free_threshold)
+
+                p = p + 2 * dy
+                x += 1
         
         return True
 
