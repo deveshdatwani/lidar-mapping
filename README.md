@@ -23,26 +23,26 @@ The following are the ROS Paramater Server Params that are set through the launc
   
 ``` 
 
-   <arg name="fixed_frame" default="odom" />
-  <arg name="sensor_frame" default="base_footprint" />
+ <arg name="fixed_frame" default="odom" />
+ <arg name="sensor_frame" default="base_footprint" />
 
-  <!-- Topics. -->
-  <arg name="sensor_topic" default="/scan" />
-  <arg name="vis_topic" default="/vis/map" />
+ <!-- Topics. -->
+ <arg name="sensor_topic" default="/scan" />
+ <arg name="vis_topic" default="/vis/map" />
 
-  <!-- Dimensions and bounds. -->
-  <arg name="x_num" default="250" />
-  <arg name="x_min" default="-10.0" />
-  <arg name="x_max" default="10.0" />
-  <arg name="y_num" default="250" />
-  <arg name="y_min" default="-10.0" />
-  <arg name="y_max" default="10.0" />
+ <!-- Dimensions and bounds. -->
+ <arg name="x_num" default="250" />
+ <arg name="x_min" default="-10.0" />
+ <arg name="x_max" default="10.0" />
+ <arg name="y_num" default="250" />
+ <arg name="y_min" default="-10.0" />
+ <arg name="y_max" default="10.0" />
 
-  <!-- Update parameters. -->
-  <arg name="occupied_update" default="0.7" />
-  <arg name="occupied_threshold" default="0.97" />
-  <arg name="free_update" default="0.3" />
-  <arg name="free_threshold" default="0.03" />
+ <!-- Update parameters. -->
+ <arg name="occupied_update" default="0.7" />
+ <arg name="occupied_threshold" default="0.97" />
+ <arg name="free_update" default="0.3" />
+ <arg name="free_threshold" default="0.03" />
   
 ```
   
