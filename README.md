@@ -10,7 +10,7 @@ We achieved great results in our attempt to build a novel approach for detecting
 
 The occupany_grid_2d.py node under the mapping package implements one of the most important data structures in mobile robotics: <i> occupany grids </i>. It is essentially a 2d matrix (in this case due to 2 dimensional lidar), each cell containing a probability value of the cell being either occupied or free. This matrix keeps a track of each cell in the environment. 
   
-### Set up 
+### Set-Up 
   
 The package named "mapping" is a ROS package which is contains the occupancy_grid_2d.py node for mapping. The mapping class is initialized and its member functions are responsible for mapping. This class has a subscriber and a publisher. The node subscribes from the /scan topic and publishes to the topic "/map/vis". The type of the message published in Marker. 
   
@@ -48,7 +48,7 @@ The following are the ROS Paramater Server Params that are set through the launc
 
 These parameters can be adjusted to build maps with requried resolution and speed given the available compute.
 
-### Updating 
+### Update Rule
 
 Updating With Log-odds
 
@@ -58,7 +58,7 @@ In the code for this lab, each voxel in the map actually stores the log-odds of 
 
 <i> When a scan ray terminates at a particular cell, that cell’s log-odds ratio is incremented by some small amount — i.e., ` ←− ` + ∆ occ — and then upper bounded by a maximum threshold to ensure numerical stability. Likewise, when the ray passes through a cell (and does not terminate there), that cell’s log-odds ratio is decremented by some other amount — i.e., ` ←− ` + ∆ f ree , where by convention ∆ f ree is negative — and similarly lower bounded by a minimum threshold. In particular, these increments are computed as the log-odds ratios corresponding to the probability that a cell is occupied given that a ray terminates there and the probability that a cell is occupied given that a ray passes through it, respectivel </i> - Lab 8 documentation, UC Berkley
 
-### Update Algorithm
+### Traversing Algorithm
 
 Once the end point is located using geometric principles, the algorithm "walks" back towards the robot and updates the occupancy of each voxel in its path. This is carried out through the Bresenham's algorithm.
 
