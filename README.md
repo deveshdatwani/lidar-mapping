@@ -48,6 +48,13 @@ The following are the ROS Paramater Server Params that are set through the launc
 
 These parameters can be adjusted to build maps with requried resolution and speed given the available compute.
 
+### Updating 
+
+Updating with log-odds
+
+In the code for this lab, each voxel in the map actually stores the log-odds of the cell instead of the probability. Conversion from probability to log-odds transforms the range of possible values from [0, 1], which is bounded and centered around 0.5, to the range (−∞, ∞), which is unbounded and centered around 0, making things easier for analysis.
+
+<img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/map1.png" height=300, width=500>
 
 
 ### Running The Code 
