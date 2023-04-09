@@ -1,17 +1,17 @@
 <launch>
   <!-- Frames of reference. -->
   <arg name="fixed_frame" default="odom" />
-  <arg name="sensor_frame" default="base_link" />
+  <arg name="sensor_frame" default="base_footprint" />
 
   <!-- Topics. -->
   <arg name="sensor_topic" default="/scan" />
   <arg name="vis_topic" default="/vis/map" />
 
   <!-- Dimensions and bounds. -->
-  <arg name="x_num" default="25" />
+  <arg name="x_num" default="250" />
   <arg name="x_min" default="-10.0" />
   <arg name="x_max" default="10.0" />
-  <arg name="y_num" default="25" />
+  <arg name="y_num" default="250" />
   <arg name="y_min" default="-10.0" />
   <arg name="y_max" default="10.0" />
 

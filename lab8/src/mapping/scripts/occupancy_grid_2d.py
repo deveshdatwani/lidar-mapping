@@ -37,8 +37,9 @@ class OccupancyGrid2d(object):
 
         # Set up the map.
         self._map = np.zeros((self._x_num, self._y_num))
-
         self._initialized = True
+        rospy.loginfo("INIT COMPLETE")
+        
         return True
 
     def LoadParameters(self):
@@ -52,11 +53,11 @@ class OccupancyGrid2d(object):
         self._x_num = rospy.get_param("~x/num")
         self._x_min = rospy.get_param("~x/min")
         self._x_max = rospy.get_param("~x/max")
-        self._x_res = int((self._x_max - self._x_min) / self._x_num) # The resolution in x. Note: This isn't a ROS parameter. What will you do instead?
+        self._x_res = 0.05 # The resolution in x. Note: This isn't a ROS parameter. What will you do instead?
         self._y_num = rospy.get_param("~y/num")
         self._y_min = rospy.get_param("~y/min")
         self._y_max = rospy.get_param("~x/max")
-        self._y_res = int((self._y_max - self._y_min) / self._y_num) # The resolution in y. Note: This isn't a ROS parameter. What will you do instead?
+        self._y_res = 0.05 # The resolution in y. Note: This isn't a ROS parameter. What will you do instead?
 
         # Update parameters.
         if not rospy.has_param("~update/occupied"):
@@ -126,6 +127,7 @@ class OccupancyGrid2d(object):
         # assuming that the turtlebot is on the ground plane.
         sensor_x = pose.transform.translation.x
         sensor_y = pose.transform.translation.y
+
         if abs(pose.transform.translation.z) > 0.05:
             rospy.logwarn("%s: Turtlebot is not on ground plane.", self._name)
 
@@ -135,8 +137,15 @@ class OccupancyGrid2d(object):
         if abs(roll) > 0.1 or abs(pitch) > 0.1:
             rospy.logwarn("%s: Turtlebot roll/pitch is too large.", self._name)
 
+
+        occupied_voxels = set()
+        unoccupied_voxels = set()
+
         # Loop over all ranges in the LaserScan.
         for idx, r in enumerate(msg.ranges):
+            
+            if r == float('inf'):
+                continue
             # Randomly throw out some rays to speed this up.
             if np.random.rand() > self._random_downsample:
                 continue
@@ -144,7 +153,10 @@ class OccupancyGrid2d(object):
                 continue
 
             # Get angle of this ray in fixed frame.
-            # TODO!
+            # theta is yaw 
+            robot_theta = np.rad2deg(yaw) + idx 
+            robot_x = sensor_x
+            robot_y = sensor_y
 
             # Throw out this point if it is too close or too far away.
             if r > msg.range_max:
@@ -160,7 +172,19 @@ class OccupancyGrid2d(object):
             # Update log-odds at each voxel along the way.
             # Only update each voxel once. 
             # The occupancy grid is stored in self._map
-            # TODO!
+            end_point_x = r * np.cos(np.deg2rad(robot_theta))
+            end_point_y = r * np.sin(np.deg2rad(robot_theta))
+
+            end_point_x_fixed_frame = (end_point_x + robot_x) 
+            end_point_y_fixed_frame = (end_point_y + robot_y) 
+            
+            grid_point_x, grid_point_y = self.PointToVoxel(end_point_x_fixed_frame, end_point_y_fixed_frame)
+
+            # Walk backward from here
+
+            # Update each voxel in path
+
+            self._map[grid_point_x, grid_point_y] = 1
 
         # Visualize.
         self.Visualize()
@@ -220,7 +244,6 @@ class OccupancyGrid2d(object):
 
                 m.points.append(p)
                 m.colors.append(self.Colormap(ii, jj))
-
         self._vis_pub.publish(m)
 
 
@@ -232,5 +255,7 @@ if __name__ == "__main__":
         rospy.logerr("Failed to initialize the mapping node.")
         sys.exit(1)
 
+
+    # print(og._map)
     rospy.spin()
 
