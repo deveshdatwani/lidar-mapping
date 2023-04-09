@@ -45,7 +45,21 @@ The following are the ROS Paramater Server Params that are set through the launc
  <arg name="free_threshold" default="0.03" />
   
 ```
-  
+
+These parameters can be adjusted to build maps with requried resolution and speed given the available compute.
+
+
+
+### Running The Code 
+
+Follow the steps below in order to map the environment in gazebo 
+
+1. Source all necassary setup files in the devel folder
+2. Launch a turtlebot in the Gazebo environment 
+~~~ roslaunch turtlebot3_gazebo turtlebot3_world.launch ~~~
+3. Run the demo 
+~~~ roslaunch mapping demo.launch ~~~
+4. 
 
 
   
