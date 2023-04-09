@@ -46,6 +46,13 @@ class OccupancyGrid2d(object):
         # Random downsampling fraction, i.e. only keep this fraction of rays.
         if not rospy.has_param("~random_downsample"):
             return False
+        
+        if not rospy.has_param("~x/res"):
+            rospy.set_param('~x/res', 0.05)
+        
+        if not rospy.has_param("~x/res"):
+            rospy.set_param('~y/res', 0.05)
+
         self._random_downsample = rospy.get_param("~random_downsample")
 
         # Dimensions and bounds.
@@ -53,11 +60,11 @@ class OccupancyGrid2d(object):
         self._x_num = rospy.get_param("~x/num")
         self._x_min = rospy.get_param("~x/min")
         self._x_max = rospy.get_param("~x/max")
-        self._x_res = 0.05 # The resolution in x. Note: This isn't a ROS parameter. What will you do instead?
+        self._x_res = rospy.get_param('~x/res')
         self._y_num = rospy.get_param("~y/num")
         self._y_min = rospy.get_param("~y/min")
         self._y_max = rospy.get_param("~x/max")
-        self._y_res = 0.05 # The resolution in y. Note: This isn't a ROS parameter. What will you do instead?
+        self._y_res = rospy.get_param('~y/res')
 
         # Update parameters.
         if not rospy.has_param("~update/occupied"):
