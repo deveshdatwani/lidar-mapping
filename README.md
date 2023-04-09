@@ -85,10 +85,9 @@ Follow the steps below in order to map the environment in gazebo
 
 Turtlebot World 1
 
-``` 
+```
 x_res, y_res = 0.01
 x_num, y_num  = 450 
-
 ```
 
 <p align="center"><img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/map1.png" width=600></p>
