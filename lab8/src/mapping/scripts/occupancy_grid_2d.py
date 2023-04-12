@@ -47,10 +47,10 @@ class OccupancyGrid2d(object):
             return False
         
         if not rospy.has_param("~x/res"):
-            rospy.set_param('~x/res', 0.1)
+            rospy.set_param('~x/res', 0.01)
         
         if not rospy.has_param("~y/res"):
-            rospy.set_param('~y/res', 0.1)
+            rospy.set_param('~y/res', 0.01)
 
         self._random_downsample = rospy.get_param("~random_downsample")
 
@@ -59,11 +59,11 @@ class OccupancyGrid2d(object):
         self._x_num = rospy.get_param("~x/num")
         self._x_min = rospy.get_param("~x/min")
         self._x_max = rospy.get_param("~x/max")
-        self._x_res = rospy.get_param("~x/res")
+        self._x_res = 0.05 # rospy.get_param("~x/res")
         self._y_num = rospy.get_param("~y/num")
         self._y_min = rospy.get_param("~y/min")
         self._y_max = rospy.get_param("~x/max")
-        self._y_res = rospy.get_param("~y/res")
+        self._y_res = 0.05 # rospy.get_param("~y/res") 
 
         # Update parameters.
         if not rospy.has_param("~update/occupied"):

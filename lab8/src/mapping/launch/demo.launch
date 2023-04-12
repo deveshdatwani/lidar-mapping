@@ -8,12 +8,12 @@
   <arg name="vis_topic" default="/vis/map" />
 
   <!-- Dimensions and bounds. -->
-  <arg name="x_num" default="450" />
+  <arg name="x_num" default="300" />
   <arg name="x_min" default="-10.0" />
-  <arg name="x_max" default="300.0" />
-  <arg name="y_num" default="450" />
+  <arg name="x_max" default="500.0" />
+  <arg name="y_num" default="300" />
   <arg name="y_min" default="-10.0" />
-  <arg name="y_max" default="300.0" />
+  <arg name="y_max" default="500.0" />
 
   <!-- Update parameters. -->
   <arg name="occupied_update" default="0.7" />
@@ -42,8 +42,7 @@
     <param name="y/num" value="$(arg y_num)" />
     <param name="y/min" value="$(arg y_min)" />
     <param name="y/max" value="$(arg y_max)" />
-    <param name="x/res" value="$(arg x_res)" />
-    <param name="y/res" value="$(arg y_res)" />
+
 
     <param name="update/occupied" value="$(arg occupied_update)" />
     <param name="update/occupied_threshold" value="$(arg occupied_threshold)" />
