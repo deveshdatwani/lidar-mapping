@@ -92,5 +92,9 @@ x_num, y_num  = 450
 
 <p align="center"><img align="center" src="https://raw.githubusercontent.com/deveshdatwani/lidar-mapping/main/assets/map1.png" width=600></p>
 
-  
+### Systematic Error
+
+A systematic error encounterd with this method involves incorrect mapping when the resolution gets finer. This is due to the drift error that is generated from wheel encoders / IMU which makes the bot lose its confidence over its orientation. 
+
+The solution to this is to fuse odometry singal with scan matching or with some visual odometry model. Without sensor fusion, this technique is highly inaccurate, especially at high bot speeds and rapid velocity changes.
   
