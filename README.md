@@ -98,3 +98,11 @@ A systematic error encounterd with this method involves incorrect mapping when t
 
 The solution to this is to fuse odometry singal with scan matching or with some visual odometry model. Without sensor fusion, this technique is highly inaccurate, especially at high bot speeds and rapid velocity changes.
   
+### Future Scope
+<i> (Updated April - 2023) to be implemented in Summer 2023 </i>
+
+As mentioned under systematic errors, the drift error from wheel encoders propogate and lead to increased mapping errors. One way to solve this is to fuse additional sensors to decrease the uncertainty in robot localization. This summer, I plan to implement the following modules;
+
+1. Particle filter 
+2. Scan matching
+3. Iterative Closest Point Matching
