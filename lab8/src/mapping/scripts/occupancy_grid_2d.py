@@ -47,10 +47,10 @@ class OccupancyGrid2d(object):
             return False
         
         if not rospy.has_param("~x/res"):
-            rospy.set_param('~x/res', 0.01)
+            rospy.set_param('~x/res', 0.1)
         
         if not rospy.has_param("~y/res"):
-            rospy.set_param('~y/res', 0.01)
+            rospy.set_param('~y/res', 0.1)
 
         self._random_downsample = rospy.get_param("~random_downsample")
 
@@ -188,40 +188,14 @@ class OccupancyGrid2d(object):
             # Update each voxel in path
             grid_x, grid_y = self.PointToVoxel(end_point_x_fixed_frame, end_point_y_fixed_frame)
             # self.bresenham(end_point_x_fixed_frame, end_point_y_fixed_frame, robot_x, robot_y, grid_x, grid_y)
-            # self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._occupied_update), self._occupied_threshold) 
-            self._map[grid_x, grid_y] = 1
+            self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._occupied_update), self._occupied_threshold) 
+            # self._map[grid_x, grid_y] = 1
         
         # Visualize.
         self.Visualize()
 
     # Traverse backwards from end point to the robot with ___ algorithm
     def bresenham(self, x1, y1, x0, y0, grid_x, grid_y):
-        travelled = set()
-        travelled.add((grid_x, grid_y))
-        dx = x1 - x0
-        dy = y1 - y0
-        x = x0
-        y = y0
-        p = 2*dy-dx
-
-        while (x < x1):
-            if p >= 0:
-                (grid_x, grid_y) = self.PointToVoxel(x, y)
-
-                if (grid_x, grid_y) not in travelled:
-                    self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._free_update), self._free_threshold) 
-                
-                y += 1
-                p = p + 2 * dy - 2 * dx
-            
-            else:
-                (grid_x, grid_y) = self.PointToVoxel(x, y)
-
-                if (grid_x, grid_y) not in travelled:
-                    self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._free_update), self._free_threshold)
-
-                p = p + 2 * dy
-                x += 1
         
         return True
 
