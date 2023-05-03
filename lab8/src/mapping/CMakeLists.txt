@@ -210,6 +210,5 @@ include_directories(
 
 catkin_install_python(PROGRAMS scripts/mapping_node.py 
     scripts/occupancy_grid_2d.py
-    scripts/hello.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

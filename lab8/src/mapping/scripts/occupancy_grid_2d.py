@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+
 import rospy
 import tf2_ros
 import tf
 import sys
+sys.path.append('/home/deveshdatwani/Slam/lab8/src/mapping/scripts')
+import mapping_node
 
 from sensor_msgs.msg import LaserScan
 from visualization_msgs.msg import Marker
