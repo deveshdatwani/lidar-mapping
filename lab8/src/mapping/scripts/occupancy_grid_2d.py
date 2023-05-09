@@ -4,10 +4,6 @@
 import rospy
 import tf2_ros
 import tf
-import sys
-sys.path.append('/home/deveshdatwani/Slam/lab8/src/mapping/scripts')
-import mapping_node
-
 from sensor_msgs.msg import LaserScan
 from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
@@ -62,11 +58,11 @@ class OccupancyGrid2d(object):
         self._x_num = rospy.get_param("~x/num")
         self._x_min = rospy.get_param("~x/min")
         self._x_max = rospy.get_param("~x/max")
-        self._x_res = 0.05 # rospy.get_param("~x/res")
+        self._x_res = 0.05 # (self._x_max - self._x_min)/self._x_num
         self._y_num = rospy.get_param("~y/num")
         self._y_min = rospy.get_param("~y/min")
         self._y_max = rospy.get_param("~x/max")
-        self._y_res = 0.05 # rospy.get_param("~y/res") 
+        self._y_res = 0.05 #(self._y_max - self._y_min)/self._y_num
 
         # Update parameters.
         if not rospy.has_param("~update/occupied"):
@@ -191,6 +187,13 @@ class OccupancyGrid2d(object):
             # Update each voxel in path
             grid_x, grid_y = self.PointToVoxel(end_point_x_fixed_frame, end_point_y_fixed_frame)
             # self.bresenham(end_point_x_fixed_frame, end_point_y_fixed_frame, robot_x, robot_y, grid_x, grid_y)
+            
+            if grid_x not in range(int(self._x_min), int(self._x_max)) or grid_y not in range(int(self._y_min), int(self._y_max)):
+                rospy.logwarn(f'POINT {(grid_x, grid_y)} BELONGS OUTSIDE THE MAP DIMENSIONS')
+
+            # print(f'GRID POINT: [{grid_x},{grid_y}]')
+            # print(f'FIXED FRAME POINT: [{end_point_x_fixed_frame}, {end_point_y_fixed_frame}]')
+
             self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._occupied_update), self._occupied_threshold) 
             # self._map[grid_x, grid_y] = 1
         
@@ -249,6 +252,13 @@ class OccupancyGrid2d(object):
         m.scale.x = self._x_res
         m.scale.y = self._y_res
         m.scale.z = 0.01
+        m.pose.position.x = 0
+        m.pose.position.y = 0
+        m.pose.position.z = 0
+        m.pose.orientation.x = 0.0
+        m.pose.orientation.y = 0.0
+        m.pose.orientation.z = 0.0
+        m.pose.orientation.w = 0.0
 
         for ii in range(self._x_num):
             for jj in range(self._y_num):
@@ -266,7 +276,6 @@ if __name__ == "__main__":
     
     if not og.Initialize():
         rospy.logerr("Failed to initialize the mapping node.")
-        sys.exit(1)
 
 
     # print(og._map)
