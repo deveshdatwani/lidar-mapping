@@ -34,7 +34,8 @@ class OccupancyGrid2d(object):
             return False
 
         # Set up the map.
-        self._map = np.zeros((self._x_num, self._y_num))
+        self._map = np.ones((self._x_num, self._y_num))
+        self._map *= 0.5
         self._initialized = True
         rospy.loginfo("INIT COMPLETE")
         
@@ -152,7 +153,7 @@ class OccupancyGrid2d(object):
             if r == float('inf'):
                 continue
             # Randomly throw out some rays to speed this up.
-            if np.random.rand() > self._random_downsample:
+            if np.random.rand() > self._random_downsample or False:
                 continue
             elif np.isnan(r):
                 continue
@@ -186,7 +187,12 @@ class OccupancyGrid2d(object):
             # Walk backward from here
             # Update each voxel in path
             grid_x, grid_y = self.PointToVoxel(end_point_x_fixed_frame, end_point_y_fixed_frame)
-            # self.bresenham(end_point_x_fixed_frame, end_point_y_fixed_frame, robot_x, robot_y, grid_x, grid_y)
+            robot_x_grid, robot_y_grid = self.PointToVoxel(robot_x, robot_y)
+            
+            X1, Y1 = grid_x, grid_y
+            X0, Y0 = robot_x_grid, robot_y_grid
+            
+            self.bresenham(X0, Y0, X1, Y1)
             
             if grid_x not in range(int(self._x_min), int(self._x_max)) or grid_y not in range(int(self._y_min), int(self._y_max)):
                 rospy.logwarn(f'POINT {(grid_x, grid_y)} BELONGS OUTSIDE THE MAP DIMENSIONS')
@@ -194,16 +200,39 @@ class OccupancyGrid2d(object):
             # print(f'GRID POINT: [{grid_x},{grid_y}]')
             # print(f'FIXED FRAME POINT: [{end_point_x_fixed_frame}, {end_point_y_fixed_frame}]')
 
-            self._map[grid_x, grid_y] += np.maximum(self.ProbabilityToLogOdds(self._occupied_update), self._occupied_threshold) 
+            self._map[grid_x, grid_y] += np.minimum(self.ProbabilityToLogOdds(self._occupied_update), self._occupied_threshold) 
             # self._map[grid_x, grid_y] = 1
         
         # Visualize.
         self.Visualize()
 
-    # Traverse backwards from end point to the robot with ___ algorithm
-    def bresenham(self, x1, y1, x0, y0, grid_x, grid_y):
-        
-        return True
+    # Traverse backwards from end point to the robot with Bresenam's algorithm
+    def bresenham(self, X0, Y0, X1, Y1):
+        X0 += 1
+        Y0 += 1
+        X1 -= 1
+        Y1 -= 1
+
+        dx = X1 - X0
+        dy = Y1 - Y0
+
+        D = 2*dy - dx
+        y = Y0
+
+        for x in range(X0, X1):
+            UPDATE = np.maximum(self.ProbabilityToLogOdds(self._free_update), self._free_threshold)
+            if float('inf') < UPDATE < float('inf'):
+                self._map[x, y] -= UPDATE
+            else:
+                self._map[x, y] = 0 
+
+            if D > 0:
+                y += 1
+                D -= 2*dx
+            
+            D += 2*dy
+
+        return None
 
     # Convert (x, y) coordinates in fixed frame to grid coordinates.
     def PointToVoxel(self, x, y):
@@ -221,7 +250,9 @@ class OccupancyGrid2d(object):
 
     # Convert between probabity and log-odds.
     def ProbabilityToLogOdds(self, p):
-        return np.log(p / (1.0 - p))
+        log_odd = p / (1.0 - p + 1e-3)
+
+        return np.log(log_odd)
 
     def LogOddsToProbability(self, l):
         return 1.0 / (1.0 + np.exp(-l))
